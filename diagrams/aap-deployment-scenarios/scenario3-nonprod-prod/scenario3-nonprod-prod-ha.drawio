@@ -1,0 +1,395 @@
+<mxfile host="app.diagrams.net" modified="2026-02-10T06:05:00.000Z" agent="5.0" version="24.0.0" etag="scenario3-drawio" type="device">
+  <diagram name="Scenario3-NonProd-Prod-HA" id="scenario3-nonprod-prod-ha">
+    <mxGraphModel dx="1422" dy="794" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="2000" pageHeight="1800" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        
+        <!-- Title -->
+        <mxCell id="title" value="Red Hat Ansible Automation Platform 2.5&#xa;Scenario 3: Separate Non-Prod &amp; Prod Environments in Two Datacenters&#xa;Complete Environment Isolation with HA across IOC &amp; ADC" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=16;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="400" y="20" width="1200" height="80" as="geometry" />
+        </mxCell>
+        
+        <!-- External Users -->
+        <mxCell id="users" value="External Users/APIs" style="shape=actor;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
+          <mxGeometry x="950" y="120" width="100" height="60" as="geometry" />
+        </mxCell>
+        
+        <!-- Production Global Load Balancer -->
+        <mxCell id="gslb-prod-box" value="Production Global Load Balancer&#xa;aap-prod.example.com" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffebee;strokeColor=#b71c1c;strokeWidth=3;verticalAlign=middle;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="500" y="220" width="400" height="70" as="geometry" />
+        </mxCell>
+        
+        <!-- Non-Production Global Load Balancer -->
+        <mxCell id="gslb-nonprod-box" value="Non-Production Global Load Balancer&#xa;aap-nonprod.example.com" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e0f2f1;strokeColor=#00695c;strokeWidth=3;verticalAlign=middle;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="1100" y="220" width="400" height="70" as="geometry" />
+        </mxCell>
+        
+        <!-- ============ PRODUCTION ENVIRONMENT ============ -->
+        
+        <!-- Production IOC Datacenter -->
+        <mxCell id="prod-ioc-dc" value="PRODUCTION - IOC Datacenter" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff3e0;strokeColor=#e65100;strokeWidth=4;verticalAlign=top;fontStyle=1;fontSize=14;dashed=1" vertex="1" parent="1">
+          <mxGeometry x="100" y="340" width="450" height="650" as="geometry" />
+        </mxCell>
+        
+        <!-- Prod IOC LB -->
+        <mxCell id="prod-ioc-lb" value="Prod IOC LB&#xa;prod-lb.ioc" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#bbdefb;strokeColor=#1565c0;strokeWidth=2" vertex="1" parent="1">
+          <mxGeometry x="200" y="380" width="250" height="50" as="geometry" />
+        </mxCell>
+        
+        <!-- Prod IOC Gateway -->
+        <mxCell id="prod-ioc-gw-box" value="Prod Gateway" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1f5ff;strokeColor=#01579b;strokeWidth=2;verticalAlign=top;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="140" y="460" width="370" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="prod-ioc-gw1" value="Prod GW1&#xa;prod-gw1.ioc" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#b3e5fc;strokeColor=#01579b;" vertex="1" parent="1">
+          <mxGeometry x="160" y="485" width="140" height="45" as="geometry" />
+        </mxCell>
+        <mxCell id="prod-ioc-gw2" value="Prod GW2&#xa;prod-gw2.ioc" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#b3e5fc;strokeColor=#01579b;" vertex="1" parent="1">
+          <mxGeometry x="320" y="485" width="140" height="45" as="geometry" />
+        </mxCell>
+        
+        <!-- Prod IOC Controller -->
+        <mxCell id="prod-ioc-ctrl-box" value="Prod Controller" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff3e0;strokeColor=#e65100;strokeWidth=2;verticalAlign=top;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="140" y="570" width="180" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="prod-ioc-ctrl1" value="Prod Ctrl1&#xa;prod-ctrl1.ioc" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe0b2;strokeColor=#e65100;" vertex="1" parent="1">
+          <mxGeometry x="160" y="595" width="140" height="45" as="geometry" />
+        </mxCell>
+        
+        <!-- Prod IOC Hub -->
+        <mxCell id="prod-ioc-hub" value="Prod Hub&#xa;prod-hub1.ioc" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1bee7;strokeColor=#4a148c;strokeWidth=2" vertex="1" parent="1">
+          <mxGeometry x="350" y="570" width="140" height="80" as="geometry" />
+        </mxCell>
+        
+        <!-- Prod IOC Database -->
+        <mxCell id="prod-ioc-db-box" value="Prod Database" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fce4ec;strokeColor=#880e4f;strokeWidth=2;verticalAlign=top;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="140" y="680" width="350" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="prod-ioc-db1" value="Prod Primary DB&#xa;prod-db1.ioc" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=15;fillColor=#f8bbd0;strokeColor=#880e4f;" vertex="1" parent="1">
+          <mxGeometry x="160" y="705" width="100" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="prod-ioc-redis" value="Prod Redis&#xa;prod-redis1.ioc" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8bbd0;strokeColor=#880e4f;" vertex="1" parent="1">
+          <mxGeometry x="280" y="705" width="100" height="50" as="geometry" />
+        </mxCell>
+        
+        <!-- Prod IOC Execution Nodes -->
+        <mxCell id="prod-ioc-exec-box" value="Prod IOC Exec Nodes" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff9c4;strokeColor=#f57f17;strokeWidth=2;verticalAlign=top;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="140" y="790" width="350" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="prod-ioc-en1" value="Prod IOC Exec1&#xa;prod-ioc-exec1.ioc" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff59d;strokeColor=#f57f17;" vertex="1" parent="1">
+          <mxGeometry x="160" y="815" width="140" height="45" as="geometry" />
+        </mxCell>
+        <mxCell id="prod-ioc-en2" value="Prod IOC Exec2&#xa;prod-ioc-exec2.ioc" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff59d;strokeColor=#f57f17;" vertex="1" parent="1">
+          <mxGeometry x="320" y="815" width="140" height="45" as="geometry" />
+        </mxCell>
+        
+        <!-- Production ADC Datacenter -->
+        <mxCell id="prod-adc-dc" value="PRODUCTION - ADC Datacenter" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff3e0;strokeColor=#e65100;strokeWidth=4;verticalAlign=top;fontStyle=1;fontSize=14;dashed=1" vertex="1" parent="1">
+          <mxGeometry x="600" y="340" width="450" height="650" as="geometry" />
+        </mxCell>
+        
+        <!-- Prod ADC LB -->
+        <mxCell id="prod-adc-lb" value="Prod ADC LB&#xa;prod-lb.adc" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#bbdefb;strokeColor=#1565c0;strokeWidth=2" vertex="1" parent="1">
+          <mxGeometry x="700" y="380" width="250" height="50" as="geometry" />
+        </mxCell>
+        
+        <!-- Prod ADC Gateway -->
+        <mxCell id="prod-adc-gw-box" value="Prod Gateway" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1f5ff;strokeColor=#01579b;strokeWidth=2;verticalAlign=top;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="640" y="460" width="370" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="prod-adc-gw1" value="Prod GW1&#xa;prod-gw1.adc" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#b3e5fc;strokeColor=#01579b;" vertex="1" parent="1">
+          <mxGeometry x="660" y="485" width="140" height="45" as="geometry" />
+        </mxCell>
+        <mxCell id="prod-adc-gw2" value="Prod GW2&#xa;prod-gw2.adc" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#b3e5fc;strokeColor=#01579b;" vertex="1" parent="1">
+          <mxGeometry x="820" y="485" width="140" height="45" as="geometry" />
+        </mxCell>
+        
+        <!-- Prod ADC Controller -->
+        <mxCell id="prod-adc-ctrl-box" value="Prod Controller" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff3e0;strokeColor=#e65100;strokeWidth=2;verticalAlign=top;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="640" y="570" width="180" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="prod-adc-ctrl1" value="Prod Ctrl1&#xa;prod-ctrl1.adc" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe0b2;strokeColor=#e65100;" vertex="1" parent="1">
+          <mxGeometry x="660" y="595" width="140" height="45" as="geometry" />
+        </mxCell>
+        
+        <!-- Prod ADC Hub -->
+        <mxCell id="prod-adc-hub" value="Prod Hub&#xa;prod-hub1.adc" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1bee7;strokeColor=#4a148c;strokeWidth=2" vertex="1" parent="1">
+          <mxGeometry x="850" y="570" width="140" height="80" as="geometry" />
+        </mxCell>
+        
+        <!-- Prod ADC Database -->
+        <mxCell id="prod-adc-db-box" value="Prod Database" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fce4ec;strokeColor=#880e4f;strokeWidth=2;verticalAlign=top;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="640" y="680" width="350" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="prod-adc-db1" value="Prod Standby DB&#xa;prod-db1.adc" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=15;fillColor=#f8bbd0;strokeColor=#880e4f;" vertex="1" parent="1">
+          <mxGeometry x="660" y="705" width="100" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="prod-adc-redis" value="Prod Redis&#xa;prod-redis1.adc" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8bbd0;strokeColor=#880e4f;" vertex="1" parent="1">
+          <mxGeometry x="780" y="705" width="100" height="50" as="geometry" />
+        </mxCell>
+        
+        <!-- Prod ADC Execution Nodes -->
+        <mxCell id="prod-adc-exec-box" value="Prod ADC Exec Nodes" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff9c4;strokeColor=#f57f17;strokeWidth=2;verticalAlign=top;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="640" y="790" width="350" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="prod-adc-en1" value="Prod ADC Exec1&#xa;prod-adc-exec1.adc" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff59d;strokeColor=#f57f17;" vertex="1" parent="1">
+          <mxGeometry x="660" y="815" width="140" height="45" as="geometry" />
+        </mxCell>
+        <mxCell id="prod-adc-en2" value="Prod ADC Exec2&#xa;prod-adc-exec2.adc" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff59d;strokeColor=#f57f17;" vertex="1" parent="1">
+          <mxGeometry x="820" y="815" width="140" height="45" as="geometry" />
+        </mxCell>
+        
+        <!-- ============ NON-PRODUCTION ENVIRONMENT ============ -->
+        
+        <!-- Non-Prod IOC Datacenter -->
+        <mxCell id="nonprod-ioc-dc" value="NON-PROD - IOC Datacenter" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8f5e9;strokeColor=#2e7d32;strokeWidth=4;verticalAlign=top;fontStyle=1;fontSize=14;dashed=1" vertex="1" parent="1">
+          <mxGeometry x="1100" y="340" width="420" height="650" as="geometry" />
+        </mxCell>
+        
+        <!-- NonProd IOC LB -->
+        <mxCell id="nonprod-ioc-lb" value="NonProd IOC LB&#xa;nonprod-lb.ioc" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#bbdefb;strokeColor=#1565c0;strokeWidth=2" vertex="1" parent="1">
+          <mxGeometry x="1185" y="380" width="250" height="50" as="geometry" />
+        </mxCell>
+        
+        <!-- NonProd IOC Gateway -->
+        <mxCell id="nonprod-ioc-gw" value="NonProd Gateway&#xa;nonprod-gw.ioc" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#b3e5fc;strokeColor=#01579b;strokeWidth=2" vertex="1" parent="1">
+          <mxGeometry x="1185" y="460" width="250" height="60" as="geometry" />
+        </mxCell>
+        
+        <!-- NonProd IOC Controller -->
+        <mxCell id="nonprod-ioc-ctrl" value="NonProd Ctrl&#xa;nonprod-ctrl.ioc" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe0b2;strokeColor=#e65100;strokeWidth=2" vertex="1" parent="1">
+          <mxGeometry x="1140" y="550" width="160" height="70" as="geometry" />
+        </mxCell>
+        
+        <!-- NonProd IOC Hub -->
+        <mxCell id="nonprod-ioc-hub" value="NonProd Hub&#xa;nonprod-hub.ioc" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1bee7;strokeColor=#4a148c;strokeWidth=2" vertex="1" parent="1">
+          <mxGeometry x="1330" y="550" width="160" height="70" as="geometry" />
+        </mxCell>
+        
+        <!-- NonProd IOC Database -->
+        <mxCell id="nonprod-ioc-db-box" value="NonProd Database" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fce4ec;strokeColor=#880e4f;strokeWidth=2;verticalAlign=top;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="1140" y="650" width="350" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="nonprod-ioc-db1" value="NonProd Primary DB&#xa;nonprod-db1.ioc" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=15;fillColor=#f8bbd0;strokeColor=#880e4f;" vertex="1" parent="1">
+          <mxGeometry x="1160" y="675" width="140" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="nonprod-ioc-redis" value="NonProd Redis&#xa;nonprod-redis1.ioc" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8bbd0;strokeColor=#880e4f;" vertex="1" parent="1">
+          <mxGeometry x="1320" y="675" width="140" height="50" as="geometry" />
+        </mxCell>
+        
+        <!-- NonProd IOC Execution -->
+        <mxCell id="nonprod-ioc-exec" value="NonProd IOC Exec&#xa;nonprod-ioc-exec.ioc" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff59d;strokeColor=#f57f17;strokeWidth=2" vertex="1" parent="1">
+          <mxGeometry x="1185" y="760" width="250" height="70" as="geometry" />
+        </mxCell>
+        
+        <!-- Non-Prod ADC Datacenter -->
+        <mxCell id="nonprod-adc-dc" value="NON-PROD - ADC Datacenter" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8f5e9;strokeColor=#2e7d32;strokeWidth=4;verticalAlign=top;fontStyle=1;fontSize=14;dashed=1" vertex="1" parent="1">
+          <mxGeometry x="1560" y="340" width="420" height="650" as="geometry" />
+        </mxCell>
+        
+        <!-- NonProd ADC LB -->
+        <mxCell id="nonprod-adc-lb" value="NonProd ADC LB&#xa;nonprod-lb.adc" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#bbdefb;strokeColor=#1565c0;strokeWidth=2" vertex="1" parent="1">
+          <mxGeometry x="1645" y="380" width="250" height="50" as="geometry" />
+        </mxCell>
+        
+        <!-- NonProd ADC Gateway -->
+        <mxCell id="nonprod-adc-gw" value="NonProd Gateway&#xa;nonprod-gw.adc" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#b3e5fc;strokeColor=#01579b;strokeWidth=2" vertex="1" parent="1">
+          <mxGeometry x="1645" y="460" width="250" height="60" as="geometry" />
+        </mxCell>
+        
+        <!-- NonProd ADC Controller -->
+        <mxCell id="nonprod-adc-ctrl" value="NonProd Ctrl&#xa;nonprod-ctrl.adc" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe0b2;strokeColor=#e65100;strokeWidth=2" vertex="1" parent="1">
+          <mxGeometry x="1600" y="550" width="160" height="70" as="geometry" />
+        </mxCell>
+        
+        <!-- NonProd ADC Hub -->
+        <mxCell id="nonprod-adc-hub" value="NonProd Hub&#xa;nonprod-hub.adc" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1bee7;strokeColor=#4a148c;strokeWidth=2" vertex="1" parent="1">
+          <mxGeometry x="1790" y="550" width="160" height="70" as="geometry" />
+        </mxCell>
+        
+        <!-- NonProd ADC Database -->
+        <mxCell id="nonprod-adc-db-box" value="NonProd Database" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fce4ec;strokeColor=#880e4f;strokeWidth=2;verticalAlign=top;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="1600" y="650" width="350" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="nonprod-adc-db1" value="NonProd Standby DB&#xa;nonprod-db1.adc" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=15;fillColor=#f8bbd0;strokeColor=#880e4f;" vertex="1" parent="1">
+          <mxGeometry x="1620" y="675" width="140" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="nonprod-adc-redis" value="NonProd Redis&#xa;nonprod-redis1.adc" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8bbd0;strokeColor=#880e4f;" vertex="1" parent="1">
+          <mxGeometry x="1780" y="675" width="140" height="50" as="geometry" />
+        </mxCell>
+        
+        <!-- NonProd ADC Execution -->
+        <mxCell id="nonprod-adc-exec" value="NonProd ADC Exec&#xa;nonprod-adc-exec.adc" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff59d;strokeColor=#f57f17;strokeWidth=2" vertex="1" parent="1">
+          <mxGeometry x="1645" y="760" width="250" height="70" as="geometry" />
+        </mxCell>
+        
+        <!-- Target Environments -->
+        <mxCell id="prod-targets-box" value="Production Targets" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffebee;strokeColor=#b71c1c;strokeWidth=2;verticalAlign=top;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="100" y="1050" width="950" height="120" as="geometry" />
+        </mxCell>
+        <mxCell id="prod-targets-ioc" value="Prod IOC Hosts" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8bbd0;strokeColor=#b71c1c;" vertex="1" parent="1">
+          <mxGeometry x="130" y="1085" width="250" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="prod-targets-adc" value="Prod ADC Hosts" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8bbd0;strokeColor=#b71c1c;" vertex="1" parent="1">
+          <mxGeometry x="420" y="1085" width="250" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="prod-targets-azure" value="Prod Azure Resources" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1f5fe;strokeColor=#01579b;" vertex="1" parent="1">
+          <mxGeometry x="710" y="1085" width="250" height="60" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="nonprod-targets-box" value="Non-Production Targets" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e0f2f1;strokeColor=#00695c;strokeWidth=2;verticalAlign=top;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="1100" y="1050" width="880" height="120" as="geometry" />
+        </mxCell>
+        <mxCell id="nonprod-targets-ioc" value="NonProd IOC Hosts" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#c8e6c9;strokeColor=#2e7d32;" vertex="1" parent="1">
+          <mxGeometry x="1130" y="1085" width="220" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="nonprod-targets-adc" value="NonProd ADC Hosts" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#c8e6c9;strokeColor=#2e7d32;" vertex="1" parent="1">
+          <mxGeometry x="1390" y="1085" width="220" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="nonprod-targets-azure" value="NonProd Azure Resources" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1f5fe;strokeColor=#01579b;" vertex="1" parent="1">
+          <mxGeometry x="1650" y="1085" width="250" height="60" as="geometry" />
+        </mxCell>
+        
+        <!-- External Systems -->
+        <mxCell id="git-box" value="Git Repositories" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#eceff1;strokeColor=#263238;strokeWidth=2;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="850" y="1230" width="300" height="80" as="geometry" />
+        </mxCell>
+        
+        <!-- Connections -->
+        <!-- Users to GSLB -->
+        <mxCell id="edge-users-gslb-prod" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;strokeColor=#b71c1c;" edge="1" parent="1" source="users" target="gslb-prod-box">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-users-gslb-nonprod" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;strokeColor=#00695c;" edge="1" parent="1" source="users" target="gslb-nonprod-box">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        
+        <!-- Prod GSLB to DCs -->
+        <mxCell id="edge-gslb-prod-ioc" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;strokeColor=#e65100;" edge="1" parent="1" source="gslb-prod-box" target="prod-ioc-lb">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-gslb-prod-adc" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;strokeColor=#e65100;dashed=1" edge="1" parent="1" source="gslb-prod-box" target="prod-adc-lb">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        
+        <!-- NonProd GSLB to DCs -->
+        <mxCell id="edge-gslb-nonprod-ioc" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;strokeColor=#2e7d32;" edge="1" parent="1" source="gslb-nonprod-box" target="nonprod-ioc-lb">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-gslb-nonprod-adc" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;strokeColor=#2e7d32;dashed=1" edge="1" parent="1" source="gslb-nonprod-box" target="nonprod-adc-lb">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        
+        <!-- Prod IOC Flow -->
+        <mxCell id="edge-prod-ioc-lb-gw" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=1.5;strokeColor=#01579b;" edge="1" parent="1" source="prod-ioc-lb" target="prod-ioc-gw1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-prod-ioc-gw-ctrl" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=1.5;strokeColor=#e65100;" edge="1" parent="1" source="prod-ioc-gw1" target="prod-ioc-ctrl1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-prod-ioc-gw-hub" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=1.5;strokeColor=#4a148c;" edge="1" parent="1" source="prod-ioc-gw1" target="prod-ioc-hub">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-prod-ioc-ctrl-db" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=1.5;strokeColor=#880e4f;" edge="1" parent="1" source="prod-ioc-ctrl1" target="prod-ioc-db1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-prod-ioc-ctrl-exec" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=1.5;strokeColor=#f57f17;" edge="1" parent="1" source="prod-ioc-ctrl1" target="prod-ioc-en1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-prod-ioc-exec-target" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=1.5;strokeColor=#b71c1c;" edge="1" parent="1" source="prod-ioc-en1" target="prod-targets-ioc">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        
+        <!-- Prod ADC Flow -->
+        <mxCell id="edge-prod-adc-lb-gw" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=1.5;strokeColor=#01579b;" edge="1" parent="1" source="prod-adc-lb" target="prod-adc-gw1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-prod-adc-gw-ctrl" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=1.5;strokeColor=#e65100;" edge="1" parent="1" source="prod-adc-gw1" target="prod-adc-ctrl1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-prod-adc-ctrl-db" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=1.5;strokeColor=#880e4f;" edge="1" parent="1" source="prod-adc-ctrl1" target="prod-adc-db1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-prod-adc-ctrl-exec" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=1.5;strokeColor=#f57f17;" edge="1" parent="1" source="prod-adc-ctrl1" target="prod-adc-en1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-prod-adc-exec-target" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=1.5;strokeColor=#b71c1c;" edge="1" parent="1" source="prod-adc-en1" target="prod-targets-adc">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        
+        <!-- Prod DB Replication -->
+        <mxCell id="edge-prod-db-repl" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;strokeColor=#880e4f;dashed=1" edge="1" parent="1" source="prod-ioc-db1" target="prod-adc-db1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        
+        <!-- NonProd IOC Flow -->
+        <mxCell id="edge-nonprod-ioc-lb-gw" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=1.5;strokeColor=#01579b;" edge="1" parent="1" source="nonprod-ioc-lb" target="nonprod-ioc-gw">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-nonprod-ioc-gw-ctrl" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=1.5;strokeColor=#e65100;" edge="1" parent="1" source="nonprod-ioc-gw" target="nonprod-ioc-ctrl">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-nonprod-ioc-ctrl-db" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=1.5;strokeColor=#880e4f;" edge="1" parent="1" source="nonprod-ioc-ctrl" target="nonprod-ioc-db1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-nonprod-ioc-ctrl-exec" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=1.5;strokeColor=#f57f17;" edge="1" parent="1" source="nonprod-ioc-ctrl" target="nonprod-ioc-exec">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-nonprod-ioc-exec-target" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=1.5;strokeColor=#2e7d32;" edge="1" parent="1" source="nonprod-ioc-exec" target="nonprod-targets-ioc">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        
+        <!-- NonProd ADC Flow -->
+        <mxCell id="edge-nonprod-adc-lb-gw" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=1.5;strokeColor=#01579b;" edge="1" parent="1" source="nonprod-adc-lb" target="nonprod-adc-gw">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-nonprod-adc-gw-ctrl" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=1.5;strokeColor=#e65100;" edge="1" parent="1" source="nonprod-adc-gw" target="nonprod-adc-ctrl">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-nonprod-adc-ctrl-db" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=1.5;strokeColor=#880e4f;" edge="1" parent="1" source="nonprod-adc-ctrl" target="nonprod-adc-db1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-nonprod-adc-ctrl-exec" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=1.5;strokeColor=#f57f17;" edge="1" parent="1" source="nonprod-adc-ctrl" target="nonprod-adc-exec">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-nonprod-adc-exec-target" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=1.5;strokeColor=#2e7d32;" edge="1" parent="1" source="nonprod-adc-exec" target="nonprod-targets-adc">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        
+        <!-- NonProd DB Replication -->
+        <mxCell id="edge-nonprod-db-repl" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;strokeColor=#880e4f;dashed=1" edge="1" parent="1" source="nonprod-ioc-db1" target="nonprod-adc-db1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        
+        <!-- Hubs to Git -->
+        <mxCell id="edge-prod-ioc-hub-git" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=1.5;strokeColor=#263238;startArrow=classic;startFill=1" edge="1" parent="1" source="prod-ioc-hub" target="git-box">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-prod-adc-hub-git" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=1.5;strokeColor=#263238;startArrow=classic;startFill=1" edge="1" parent="1" source="prod-adc-hub" target="git-box">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-nonprod-ioc-hub-git" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=1.5;strokeColor=#263238;startArrow=classic;startFill=1" edge="1" parent="1" source="nonprod-ioc-hub" target="git-box">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-nonprod-adc-hub-git" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=1.5;strokeColor=#263238;startArrow=classic;startFill=1" edge="1" parent="1" source="nonprod-adc-hub" target="git-box">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        
+        <!-- Legend -->
+        <mxCell id="legend-box" value="Legend" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;strokeWidth=2;verticalAlign=top;fontStyle=1;align=left" vertex="1" parent="1">
+          <mxGeometry x="100" y="1230" width="350" height="240" as="geometry" />
+        </mxCell>
+        <mxCell id="legend-active" value="Solid Line = Active Connection" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="110" y="1255" width="330" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="legend-standby" value="Dashed Line = Standby/Replication" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="110" y="1280" width="330" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="legend-notes" value="• ~39 Total Nodes&#xa;• Complete Prod/NonProd Isolation&#xa;• Dual DC HA for Each Environment&#xa;• Separate Execution per Environment &amp; DC&#xa;• Compliance Ready (SOX, PCI-DSS, HIPAA)&#xa;• Cross-DC Database Replication&#xa;• Independent Failover per Environment" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=top;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="110" y="1305" width="330" height="155" as="geometry" />
+        </mxCell>
+        
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

@@ -1,0 +1,223 @@
+<mxfile host="app.diagrams.net" modified="2026-02-10T06:04:00.000Z" agent="5.0" version="24.0.0" etag="scenario1-drawio" type="device">
+  <diagram name="Scenario1-Single-DC-HA" id="scenario1-single-dc-ha">
+    <mxGraphModel dx="1422" dy="794" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1600" pageHeight="1200" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        
+        <!-- Title -->
+        <mxCell id="title" value="Red Hat Ansible Automation Platform 2.5&#xa;Scenario 1: Single Datacenter (IOC) with High Availability&#xa;Common Execution Node Pool for All Targets" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=16;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="400" y="20" width="800" height="80" as="geometry" />
+        </mxCell>
+        
+        <!-- External Users -->
+        <mxCell id="users" value="External Users/APIs" style="shape=actor;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
+          <mxGeometry x="750" y="120" width="100" height="60" as="geometry" />
+        </mxCell>
+        
+        <!-- Load Balancer HA Pair -->
+        <mxCell id="lb-box" value="Load Balancer (HA Pair)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e3f2fd;strokeColor=#1565c0;strokeWidth=3;verticalAlign=top;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="650" y="220" width="300" height="100" as="geometry" />
+        </mxCell>
+        <mxCell id="lb1" value="Primary LB&#xa;lb1.ioc.example.com" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#bbdefb;strokeColor=#1565c0;" vertex="1" parent="1">
+          <mxGeometry x="680" y="250" width="120" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="lb2" value="Secondary LB&#xa;lb2.ioc.example.com" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#bbdefb;strokeColor=#1565c0;" vertex="1" parent="1">
+          <mxGeometry x="810" y="250" width="120" height="50" as="geometry" />
+        </mxCell>
+        
+        <!-- IOC Datacenter Container -->
+        <mxCell id="ioc-dc" value="IOC Datacenter" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;strokeWidth=4;verticalAlign=top;fontStyle=1;fontSize=14;dashed=1" vertex="1" parent="1">
+          <mxGeometry x="100" y="360" width="1400" height="600" as="geometry" />
+        </mxCell>
+        
+        <!-- Automation Gateway Cluster -->
+        <mxCell id="gateway-box" value="Automation Gateway Cluster (Active-Active)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1f5ff;strokeColor=#01579b;strokeWidth=3;verticalAlign=top;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="650" y="400" width="300" height="100" as="geometry" />
+        </mxCell>
+        <mxCell id="ag1" value="Gateway Node 1&#xa;gateway1.ioc.example.com&#xa;Port: 443" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#b3e5fc;strokeColor=#01579b;" vertex="1" parent="1">
+          <mxGeometry x="680" y="430" width="120" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="ag2" value="Gateway Node 2&#xa;gateway2.ioc.example.com&#xa;Port: 443" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#b3e5fc;strokeColor=#01579b;" vertex="1" parent="1">
+          <mxGeometry x="810" y="430" width="120" height="50" as="geometry" />
+        </mxCell>
+        
+        <!-- Automation Controller Cluster -->
+        <mxCell id="controller-box" value="Automation Controller Cluster (Active-Active)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff3e0;strokeColor=#e65100;strokeWidth=3;verticalAlign=top;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="150" y="540" width="340" height="120" as="geometry" />
+        </mxCell>
+        <mxCell id="ac1" value="Controller Node 1&#xa;controller1.ioc.example.com&#xa;Ports: 443, 80" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe0b2;strokeColor=#e65100;" vertex="1" parent="1">
+          <mxGeometry x="170" y="575" width="90" height="65" as="geometry" />
+        </mxCell>
+        <mxCell id="ac2" value="Controller Node 2&#xa;controller2.ioc.example.com&#xa;Ports: 443, 80" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe0b2;strokeColor=#e65100;" vertex="1" parent="1">
+          <mxGeometry x="270" y="575" width="90" height="65" as="geometry" />
+        </mxCell>
+        <mxCell id="ac3" value="Controller Node 3&#xa;controller3.ioc.example.com&#xa;Ports: 443, 80" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe0b2;strokeColor=#e65100;" vertex="1" parent="1">
+          <mxGeometry x="370" y="575" width="90" height="65" as="geometry" />
+        </mxCell>
+        
+        <!-- Automation Hub Cluster -->
+        <mxCell id="hub-box" value="Automation Hub Cluster (Active-Active)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f3e5f5;strokeColor=#4a148c;strokeWidth=3;verticalAlign=top;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="540" y="540" width="260" height="120" as="geometry" />
+        </mxCell>
+        <mxCell id="ah1" value="Hub Node 1&#xa;hub1.ioc.example.com&#xa;Ports: 443, 80" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1bee7;strokeColor=#4a148c;" vertex="1" parent="1">
+          <mxGeometry x="560" y="575" width="100" height="65" as="geometry" />
+        </mxCell>
+        <mxCell id="ah2" value="Hub Node 2&#xa;hub2.ioc.example.com&#xa;Ports: 443, 80" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1bee7;strokeColor=#4a148c;" vertex="1" parent="1">
+          <mxGeometry x="670" y="575" width="100" height="65" as="geometry" />
+        </mxCell>
+        
+        <!-- Event-Driven Ansible -->
+        <mxCell id="eda-box" value="Event-Driven Ansible (Active-Passive)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8f5e9;strokeColor=#1b5e20;strokeWidth=3;verticalAlign=top;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="850" y="540" width="260" height="120" as="geometry" />
+        </mxCell>
+        <mxCell id="ed1" value="EDA Primary&#xa;eda1.ioc.example.com&#xa;Port: 443" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#c8e6c9;strokeColor=#1b5e20;" vertex="1" parent="1">
+          <mxGeometry x="870" y="575" width="100" height="65" as="geometry" />
+        </mxCell>
+        <mxCell id="ed2" value="EDA Secondary&#xa;eda2.ioc.example.com&#xa;Port: 443" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#c8e6c9;strokeColor=#1b5e20;" vertex="1" parent="1">
+          <mxGeometry x="980" y="575" width="100" height="65" as="geometry" />
+        </mxCell>
+        
+        <!-- Database Cluster -->
+        <mxCell id="db-box" value="Database Cluster (PostgreSQL HA)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fce4ec;strokeColor=#880e4f;strokeWidth=3;verticalAlign=top;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="1160" y="540" width="300" height="120" as="geometry" />
+        </mxCell>
+        <mxCell id="db1" value="Primary PostgreSQL&#xa;db1.ioc.example.com&#xa;Port: 5432" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=15;fillColor=#f8bbd0;strokeColor=#880e4f;" vertex="1" parent="1">
+          <mxGeometry x="1180" y="575" width="90" height="65" as="geometry" />
+        </mxCell>
+        <mxCell id="db2" value="Standby PostgreSQL&#xa;db2.ioc.example.com&#xa;Port: 5432" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=15;fillColor=#f8bbd0;strokeColor=#880e4f;" vertex="1" parent="1">
+          <mxGeometry x="1280" y="575" width="90" height="65" as="geometry" />
+        </mxCell>
+        <mxCell id="redis1" value="Primary Redis&#xa;redis1.ioc.example.com&#xa;Port: 6379" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8bbd0;strokeColor=#880e4f;" vertex="1" parent="1">
+          <mxGeometry x="1380" y="575" width="60" height="65" as="geometry" />
+        </mxCell>
+        
+        <!-- Common Execution Nodes Pool -->
+        <mxCell id="exec-box" value="Common Execution Nodes Pool" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff9c4;strokeColor=#f57f17;strokeWidth=3;verticalAlign=top;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="150" y="700" width="950" height="120" as="geometry" />
+        </mxCell>
+        <mxCell id="en1" value="Exec Node 1&#xa;exec1.ioc.example.com&#xa;Port: 27199" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff59d;strokeColor=#f57f17;" vertex="1" parent="1">
+          <mxGeometry x="180" y="735" width="100" height="65" as="geometry" />
+        </mxCell>
+        <mxCell id="en2" value="Exec Node 2&#xa;exec2.ioc.example.com&#xa;Port: 27199" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff59d;strokeColor=#f57f17;" vertex="1" parent="1">
+          <mxGeometry x="320" y="735" width="100" height="65" as="geometry" />
+        </mxCell>
+        <mxCell id="en3" value="Exec Node 3&#xa;exec3.ioc.example.com&#xa;Port: 27199" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff59d;strokeColor=#f57f17;" vertex="1" parent="1">
+          <mxGeometry x="460" y="735" width="100" height="65" as="geometry" />
+        </mxCell>
+        <mxCell id="en4" value="Exec Node 4&#xa;exec4.ioc.example.com&#xa;Port: 27199" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff59d;strokeColor=#f57f17;" vertex="1" parent="1">
+          <mxGeometry x="600" y="735" width="100" height="65" as="geometry" />
+        </mxCell>
+        
+        <!-- Target Environments -->
+        <mxCell id="ioc-targets" value="IOC Datacenter Targets&#xa;IOC Client Hosts" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f1f8e9;strokeColor=#33691e;strokeWidth=2;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="150" y="1000" width="220" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="adc-targets" value="ADC Datacenter Targets&#xa;ADC Client Hosts" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f1f8e9;strokeColor=#33691e;strokeWidth=2;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="420" y="1000" width="220" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="azure-targets" value="Azure Cloud Targets&#xa;Azure Client Hosts" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1f5fe;strokeColor=#01579b;strokeWidth=2;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="690" y="1000" width="220" height="80" as="geometry" />
+        </mxCell>
+        
+        <!-- External Systems -->
+        <mxCell id="git-box" value="Git Repositories" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#eceff1;strokeColor=#263238;strokeWidth=2;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="1200" y="700" width="200" height="80" as="geometry" />
+        </mxCell>
+        
+        <!-- Connections -->
+        <!-- Users to LB -->
+        <mxCell id="edge-users-lb1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;strokeColor=#1565c0;" edge="1" parent="1" source="users" target="lb1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-users-lb2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;strokeColor=#1565c0;dashed=1" edge="1" parent="1" source="users" target="lb2">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        
+        <!-- LB to Gateway -->
+        <mxCell id="edge-lb1-ag1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;strokeColor=#01579b;" edge="1" parent="1" source="lb1" target="ag1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-lb1-ag2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;strokeColor=#01579b;" edge="1" parent="1" source="lb1" target="ag2">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        
+        <!-- Gateway to Controller -->
+        <mxCell id="edge-ag1-ac1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=1.5;strokeColor=#e65100;" edge="1" parent="1" source="ag1" target="ac1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-ag1-ac2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=1.5;strokeColor=#e65100;" edge="1" parent="1" source="ag1" target="ac2">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-ag1-ac3" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=1.5;strokeColor=#e65100;" edge="1" parent="1" source="ag1" target="ac3">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        
+        <!-- Gateway to Hub -->
+        <mxCell id="edge-ag1-ah1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=1.5;strokeColor=#4a148c;" edge="1" parent="1" source="ag1" target="ah1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-ag1-ah2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=1.5;strokeColor=#4a148c;" edge="1" parent="1" source="ag1" target="ah2">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        
+        <!-- Gateway to EDA -->
+        <mxCell id="edge-ag1-ed1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=1.5;strokeColor=#1b5e20;" edge="1" parent="1" source="ag1" target="ed1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        
+        <!-- Controller to Database -->
+        <mxCell id="edge-ac1-db1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=1.5;strokeColor=#880e4f;" edge="1" parent="1" source="ac1" target="db1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-ac2-db1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=1.5;strokeColor=#880e4f;" edge="1" parent="1" source="ac2" target="db1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        
+        <!-- Database Replication -->
+        <mxCell id="edge-db1-db2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;strokeColor=#880e4f;dashed=1" edge="1" parent="1" source="db1" target="db2">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        
+        <!-- Controller to Exec Nodes -->
+        <mxCell id="edge-ac1-en1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=1.5;strokeColor=#f57f17;" edge="1" parent="1" source="ac1" target="en1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-ac2-en2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=1.5;strokeColor=#f57f17;" edge="1" parent="1" source="ac2" target="en2">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        
+        <!-- Hub to Git -->
+        <mxCell id="edge-ah1-git" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=1.5;strokeColor=#263238;startArrow=classic;startFill=1" edge="1" parent="1" source="ah1" target="git-box">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        
+        <!-- Exec Nodes to Targets -->
+        <mxCell id="edge-en1-ioc" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=1.5;strokeColor=#33691e;" edge="1" parent="1" source="en1" target="ioc-targets">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-en2-adc" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=1.5;strokeColor=#33691e;" edge="1" parent="1" source="en2" target="adc-targets">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-en3-azure" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=1.5;strokeColor=#01579b;" edge="1" parent="1" source="en3" target="azure-targets">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        
+        <!-- Legend -->
+        <mxCell id="legend-box" value="Legend" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;strokeWidth=2;verticalAlign=top;fontStyle=1;align=left" vertex="1" parent="1">
+          <mxGeometry x="950" y="1000" width="250" height="160" as="geometry" />
+        </mxCell>
+        <mxCell id="legend-active" value="Solid Line = Active Connection" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="960" y="1025" width="230" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="legend-standby" value="Dashed Line = Standby/Replication" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="960" y="1050" width="230" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="legend-notes" value="• ~19 Total Nodes&#xa;• Common Execution Pool&#xa;• Single DC HA&#xa;• Zero Downtime Maintenance" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=top;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="960" y="1075" width="230" height="75" as="geometry" />
+        </mxCell>
+        
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
