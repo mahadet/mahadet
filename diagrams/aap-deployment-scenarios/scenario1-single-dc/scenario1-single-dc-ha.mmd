@@ -1,0 +1,182 @@
+%% Red Hat Ansible Automation Platform 2.5
+%% Scenario 1: Single Datacenter (IOC) with High Availability
+%% Deployment with maintenance tolerance and common execution nodes
+
+graph TB
+    %% External Access
+    Users[External Users/APIs]
+    
+    %% Load Balancer Layer
+    subgraph LB["Load Balancer (HA Pair)"]
+        LB1[Primary LB<br/>lb1.ioc.example.com]
+        LB2[Secondary LB<br/>lb2.ioc.example.com]
+    end
+    
+    %% IOC Datacenter
+    subgraph IOC["IOC Datacenter"]
+        
+        %% Automation Gateway Cluster
+        subgraph GatewayCluster["Automation Gateway Cluster (Active-Active)"]
+            AG1[Gateway Node 1<br/>gateway1.ioc.example.com<br/>Port: 443]
+            AG2[Gateway Node 2<br/>gateway2.ioc.example.com<br/>Port: 443]
+        end
+        
+        %% Controller Cluster
+        subgraph ControllerCluster["Automation Controller Cluster (Active-Active)"]
+            AC1[Controller Node 1<br/>controller1.ioc.example.com<br/>Ports: 443, 80]
+            AC2[Controller Node 2<br/>controller2.ioc.example.com<br/>Ports: 443, 80]
+            AC3[Controller Node 3<br/>controller3.ioc.example.com<br/>Ports: 443, 80]
+        end
+        
+        %% Hub Cluster
+        subgraph HubCluster["Automation Hub Cluster (Active-Active)"]
+            AH1[Hub Node 1<br/>hub1.ioc.example.com<br/>Ports: 443, 80]
+            AH2[Hub Node 2<br/>hub2.ioc.example.com<br/>Ports: 443, 80]
+        end
+        
+        %% Event-Driven Ansible
+        subgraph EDACluster["Event-Driven Ansible (Active-Passive)"]
+            ED1[EDA Primary<br/>eda1.ioc.example.com<br/>Port: 443]
+            ED2[EDA Secondary<br/>eda2.ioc.example.com<br/>Port: 443]
+        end
+        
+        %% Database Cluster
+        subgraph DBCluster["Database Cluster (PostgreSQL HA)"]
+            DB1[(Primary PostgreSQL<br/>db1.ioc.example.com<br/>Port: 5432)]
+            DB2[(Standby PostgreSQL<br/>db2.ioc.example.com<br/>Port: 5432)]
+            Redis1[Primary Redis<br/>redis1.ioc.example.com<br/>Port: 6379]
+            Redis2[Standby Redis<br/>redis2.ioc.example.com<br/>Port: 6379]
+        end
+        
+        %% Common Execution Nodes
+        subgraph CommonExecNodes["Common Execution Nodes Pool"]
+            EN1[Exec Node 1<br/>exec1.ioc.example.com<br/>Port: 27199]
+            EN2[Exec Node 2<br/>exec2.ioc.example.com<br/>Port: 27199]
+            EN3[Exec Node 3<br/>exec3.ioc.example.com<br/>Port: 27199]
+            EN4[Exec Node 4<br/>exec4.ioc.example.com<br/>Port: 27199]
+        end
+    end
+    
+    %% Target Environments
+    subgraph IOCTargets["IOC Datacenter Targets"]
+        IOCHosts[IOC Client Hosts]
+    end
+    
+    subgraph ADCTargets["ADC Datacenter Targets"]
+        ADCHosts[ADC Client Hosts]
+    end
+    
+    subgraph AzureTargets["Azure Cloud Targets"]
+        AzureHosts[Azure Client Hosts]
+    end
+    
+    %% External Systems
+    subgraph External["External Systems"]
+        Git[Git Repositories]
+    end
+    
+    %% Connections - External to LB
+    Users -->|HTTPS 443| LB1
+    Users -->|HTTPS 443| LB2
+    
+    %% LB to Gateway
+    LB1 -.->|Active| AG1
+    LB1 -.->|Active| AG2
+    LB2 -.->|Standby| AG1
+    LB2 -.->|Standby| AG2
+    
+    %% Gateway to Services
+    AG1 --> AC1
+    AG1 --> AC2
+    AG1 --> AC3
+    AG2 --> AC1
+    AG2 --> AC2
+    AG2 --> AC3
+    
+    AG1 --> AH1
+    AG1 --> AH2
+    AG2 --> AH1
+    AG2 --> AH2
+    
+    AG1 --> ED1
+    AG2 --> ED1
+    
+    %% Controller to Database
+    AC1 -->|PostgreSQL 5432| DB1
+    AC2 -->|PostgreSQL 5432| DB1
+    AC3 -->|PostgreSQL 5432| DB1
+    
+    AC1 -->|Redis 6379| Redis1
+    AC2 -->|Redis 6379| Redis1
+    AC3 -->|Redis 6379| Redis1
+    
+    %% Database Replication
+    DB1 -.->|Streaming Replication| DB2
+    Redis1 -.->|Replication| Redis2
+    
+    %% Hub to Database
+    AH1 -->|PostgreSQL 5432| DB1
+    AH2 -->|PostgreSQL 5432| DB1
+    
+    %% EDA to Database
+    ED1 -->|PostgreSQL 5432| DB1
+    ED2 -.->|Standby| DB1
+    
+    %% EDA HA
+    ED1 -.->|Heartbeat| ED2
+    
+    %% Controller to Execution Nodes (Common Pool)
+    AC1 -->|Mesh 27199| EN1
+    AC1 -->|Mesh 27199| EN2
+    AC1 -->|Mesh 27199| EN3
+    AC1 -->|Mesh 27199| EN4
+    AC2 -->|Mesh 27199| EN1
+    AC2 -->|Mesh 27199| EN2
+    AC2 -->|Mesh 27199| EN3
+    AC2 -->|Mesh 27199| EN4
+    AC3 -->|Mesh 27199| EN1
+    AC3 -->|Mesh 27199| EN2
+    AC3 -->|Mesh 27199| EN3
+    AC3 -->|Mesh 27199| EN4
+    
+    %% Hub to Git
+    AH1 <-->|Sync| Git
+    AH2 <-->|Sync| Git
+    
+    %% Execution Nodes to All Targets
+    EN1 -->|Automation| IOCHosts
+    EN1 -->|Automation| ADCHosts
+    EN1 -->|VPN/ExpressRoute| AzureHosts
+    
+    EN2 -->|Automation| IOCHosts
+    EN2 -->|Automation| ADCHosts
+    EN2 -->|VPN/ExpressRoute| AzureHosts
+    
+    EN3 -->|Automation| IOCHosts
+    EN3 -->|Automation| ADCHosts
+    EN3 -->|VPN/ExpressRoute| AzureHosts
+    
+    EN4 -->|Automation| IOCHosts
+    EN4 -->|Automation| ADCHosts
+    EN4 -->|VPN/ExpressRoute| AzureHosts
+    
+    %% Styling
+    classDef loadbalancer fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    classDef gateway fill:#e1f5ff,stroke:#01579b,stroke-width:3px
+    classDef controller fill:#fff3e0,stroke:#e65100,stroke-width:3px
+    classDef hub fill:#f3e5f5,stroke:#4a148c,stroke-width:3px
+    classDef eda fill:#e8f5e9,stroke:#1b5e20,stroke-width:3px
+    classDef database fill:#fce4ec,stroke:#880e4f,stroke-width:3px
+    classDef execution fill:#fff9c4,stroke:#f57f17,stroke-width:3px
+    classDef targets fill:#f1f8e9,stroke:#33691e,stroke-width:2px
+    classDef external fill:#eceff1,stroke:#263238,stroke-width:2px
+    
+    class LB1,LB2 loadbalancer
+    class AG1,AG2 gateway
+    class AC1,AC2,AC3 controller
+    class AH1,AH2 hub
+    class ED1,ED2 eda
+    class DB1,DB2,Redis1,Redis2 database
+    class EN1,EN2,EN3,EN4 execution
+    class IOCHosts,ADCHosts,AzureHosts targets
+    class Git external

@@ -1,0 +1,294 @@
+%% Red Hat Ansible Automation Platform 2.5
+%% Scenario 3: Separate Non-Prod & Prod Environments in Two Datacenters
+%% Complete environment isolation with HA across IOC & ADC datacenters
+
+graph TB
+    %% External Access
+    Users[External Users/APIs]
+    
+    %% Global Load Balancers
+    subgraph GLBPROD["Production Global Load Balancer"]
+        GSLBPROD[Prod GSLB<br/>aap-prod.example.com]
+    end
+    
+    subgraph GLBNONPROD["Non-Production Global Load Balancer"]
+        GSLBNONPROD[NonProd GSLB<br/>aap-nonprod.example.com]
+    end
+    
+    %% ============ PRODUCTION ENVIRONMENT ============
+    
+    %% Production IOC Datacenter
+    subgraph PRODIOC["PRODUCTION - IOC Datacenter"]
+        
+        subgraph PRODIOCLB["Prod IOC LB"]
+            PRODIOCLB1[Prod LB<br/>prod-lb.ioc.example.com]
+        end
+        
+        subgraph PRODIOCGateway["Prod Gateway Cluster"]
+            PRODIOCAG1[Prod GW1<br/>prod-gw1.ioc.example.com]
+            PRODIOCAG2[Prod GW2<br/>prod-gw2.ioc.example.com]
+        end
+        
+        subgraph PRODIOCController["Prod Controller Cluster"]
+            PRODIOCAC1[Prod Ctrl1<br/>prod-ctrl1.ioc.example.com]
+            PRODIOCAC2[Prod Ctrl2<br/>prod-ctrl2.ioc.example.com]
+        end
+        
+        subgraph PRODIOCHub["Prod Hub Cluster"]
+            PRODIOCAH1[Prod Hub1<br/>prod-hub1.ioc.example.com]
+        end
+        
+        subgraph PRODIOCEDA["Prod EDA"]
+            PRODIOCED1[Prod EDA<br/>prod-eda.ioc.example.com]
+        end
+        
+        subgraph PRODIOCDB["Prod Database"]
+            PRODIOCDB1[(Prod Primary DB<br/>prod-db1.ioc.example.com)]
+            PRODIOCRedis[Prod Redis<br/>prod-redis1.ioc.example.com]
+        end
+        
+        subgraph PRODIOCExec["Prod IOC Exec Nodes"]
+            PRODIOCEN1[Prod IOC Exec1<br/>prod-ioc-exec1.ioc.example.com]
+            PRODIOCEN2[Prod IOC Exec2<br/>prod-ioc-exec2.ioc.example.com]
+        end
+    end
+    
+    %% Production ADC Datacenter
+    subgraph PRODADC["PRODUCTION - ADC Datacenter"]
+        
+        subgraph PRODADCLB["Prod ADC LB"]
+            PRODADCLB1[Prod LB<br/>prod-lb.adc.example.com]
+        end
+        
+        subgraph PRODADCGateway["Prod Gateway Cluster"]
+            PRODADCAG1[Prod GW1<br/>prod-gw1.adc.example.com]
+            PRODADCAG2[Prod GW2<br/>prod-gw2.adc.example.com]
+        end
+        
+        subgraph PRODADCController["Prod Controller Cluster"]
+            PRODADCAC1[Prod Ctrl1<br/>prod-ctrl1.adc.example.com]
+            PRODADCAC2[Prod Ctrl2<br/>prod-ctrl2.adc.example.com]
+        end
+        
+        subgraph PRODADCHub["Prod Hub Cluster"]
+            PRODADCAH1[Prod Hub1<br/>prod-hub1.adc.example.com]
+        end
+        
+        subgraph PRODADCEDA["Prod EDA"]
+            PRODADCED1[Prod EDA<br/>prod-eda.adc.example.com]
+        end
+        
+        subgraph PRODADCDB["Prod Database"]
+            PRODADCDB1[(Prod Standby DB<br/>prod-db1.adc.example.com)]
+            PRODADCRedis[Prod Redis<br/>prod-redis1.adc.example.com]
+        end
+        
+        subgraph PRODADCExec["Prod ADC Exec Nodes"]
+            PRODADCEN1[Prod ADC Exec1<br/>prod-adc-exec1.adc.example.com]
+            PRODADCEN2[Prod ADC Exec2<br/>prod-adc-exec2.adc.example.com]
+        end
+    end
+    
+    %% Production Azure Execution
+    subgraph PRODAzureExec["Prod Azure Exec Nodes"]
+        PRODAzureEN1[Prod Azure Exec1<br/>prod-azure-exec1.ioc.example.com]
+        PRODAzureEN2[Prod Azure Exec2<br/>prod-azure-exec2.adc.example.com]
+    end
+    
+    %% ============ NON-PRODUCTION ENVIRONMENT ============
+    
+    %% Non-Prod IOC Datacenter
+    subgraph NONPRODIOC["NON-PROD - IOC Datacenter"]
+        
+        subgraph NONPRODIOCLB["NonProd IOC LB"]
+            NONPRODIOCLB1[NonProd LB<br/>nonprod-lb.ioc.example.com]
+        end
+        
+        subgraph NONPRODIOCGateway["NonProd Gateway"]
+            NONPRODIOCAG1[NonProd GW<br/>nonprod-gw.ioc.example.com]
+        end
+        
+        subgraph NONPRODIOCController["NonProd Controller"]
+            NONPRODIOCAC1[NonProd Ctrl<br/>nonprod-ctrl.ioc.example.com]
+        end
+        
+        subgraph NONPRODIOCHub["NonProd Hub"]
+            NONPRODIOCAH1[NonProd Hub<br/>nonprod-hub.ioc.example.com]
+        end
+        
+        subgraph NONPRODIOCDB["NonProd Database"]
+            NONPRODIOCDB1[(NonProd Primary DB<br/>nonprod-db1.ioc.example.com)]
+            NONPRODIOCRedis[NonProd Redis<br/>nonprod-redis1.ioc.example.com]
+        end
+        
+        subgraph NONPRODIOCExec["NonProd IOC Exec"]
+            NONPRODIOCEN1[NonProd IOC Exec<br/>nonprod-ioc-exec.ioc.example.com]
+        end
+    end
+    
+    %% Non-Prod ADC Datacenter
+    subgraph NONPRODADC["NON-PROD - ADC Datacenter"]
+        
+        subgraph NONPRODADCLB["NonProd ADC LB"]
+            NONPRODADCLB1[NonProd LB<br/>nonprod-lb.adc.example.com]
+        end
+        
+        subgraph NONPRODADCGateway["NonProd Gateway"]
+            NONPRODADCAG1[NonProd GW<br/>nonprod-gw.adc.example.com]
+        end
+        
+        subgraph NONPRODADCController["NonProd Controller"]
+            NONPRODADCAC1[NonProd Ctrl<br/>nonprod-ctrl.adc.example.com]
+        end
+        
+        subgraph NONPRODADCHub["NonProd Hub"]
+            NONPRODADCAH1[NonProd Hub<br/>nonprod-hub.adc.example.com]
+        end
+        
+        subgraph NONPRODADCDB["NonProd Database"]
+            NONPRODADCDB1[(NonProd Standby DB<br/>nonprod-db1.adc.example.com)]
+            NONPRODADCRedis[NonProd Redis<br/>nonprod-redis1.adc.example.com]
+        end
+        
+        subgraph NONPRODADCExec["NonProd ADC Exec"]
+            NONPRODADCEN1[NonProd ADC Exec<br/>nonprod-adc-exec.adc.example.com]
+        end
+    end
+    
+    %% Non-Prod Azure Execution
+    subgraph NONPRODAzureExec["NonProd Azure Exec"]
+        NONPRODAzureEN1[NonProd Azure Exec<br/>nonprod-azure-exec.ioc.example.com]
+    end
+    
+    %% Target Environments
+    subgraph ProdTargets["Production Targets"]
+        ProdIOC[Prod IOC Hosts]
+        ProdADC[Prod ADC Hosts]
+        ProdAzure[Prod Azure Resources]
+    end
+    
+    subgraph NonProdTargets["Non-Production Targets"]
+        NonProdIOC[NonProd IOC Hosts]
+        NonProdADC[NonProd ADC Hosts]
+        NonProdAzure[NonProd Azure Resources]
+    end
+    
+    %% External
+    Git[Git Repositories]
+    
+    %% User Connections
+    Users -->|Prod Traffic| GSLBPROD
+    Users -->|NonProd Traffic| GSLBNONPROD
+    
+    %% Production GSLB
+    GSLBPROD -->|Primary| PRODIOCLB1
+    GSLBPROD -.->|Failover| PRODADCLB1
+    
+    %% Non-Prod GSLB
+    GSLBNONPROD -->|Primary| NONPRODIOCLB1
+    GSLBNONPROD -.->|Failover| NONPRODADCLB1
+    
+    %% Production IOC Connections
+    PRODIOCLB1 --> PRODIOCAG1
+    PRODIOCLB1 --> PRODIOCAG2
+    PRODIOCAG1 --> PRODIOCAC1
+    PRODIOCAG1 --> PRODIOCAC2
+    PRODIOCAG2 --> PRODIOCAC1
+    PRODIOCAG2 --> PRODIOCAC2
+    PRODIOCAG1 --> PRODIOCAH1
+    PRODIOCAG1 --> PRODIOCED1
+    PRODIOCAC1 --> PRODIOCDB1
+    PRODIOCAC2 --> PRODIOCDB1
+    PRODIOCAC1 --> PRODIOCRedis
+    PRODIOCAH1 --> PRODIOCDB1
+    PRODIOCED1 --> PRODIOCDB1
+    
+    %% Production ADC Connections
+    PRODADCLB1 --> PRODADCAG1
+    PRODADCLB1 --> PRODADCAG2
+    PRODADCAG1 --> PRODADCAC1
+    PRODADCAG1 --> PRODADCAC2
+    PRODADCAG2 --> PRODADCAC1
+    PRODADCAG2 --> PRODADCAC2
+    PRODADCAG1 --> PRODADCAH1
+    PRODADCAG1 --> PRODADCED1
+    PRODADCAC1 --> PRODADCDB1
+    PRODADCAC2 --> PRODADCDB1
+    PRODADCAC1 --> PRODADCRedis
+    PRODADCAH1 --> PRODADCDB1
+    PRODADCED1 --> PRODADCDB1
+    
+    %% Production Cross-DC Replication
+    PRODIOCDB1 -.->|Async Replication| PRODADCDB1
+    PRODIOCRedis -.->|Replication| PRODADCRedis
+    
+    %% Production Execution
+    PRODIOCAC1 --> PRODIOCEN1
+    PRODIOCAC1 --> PRODIOCEN2
+    PRODIOCAC1 --> PRODAzureEN1
+    PRODADCAC1 --> PRODADCEN1
+    PRODADCAC1 --> PRODADCEN2
+    PRODADCAC1 --> PRODAzureEN2
+    
+    PRODIOCEN1 --> ProdIOC
+    PRODIOCEN2 --> ProdIOC
+    PRODADCEN1 --> ProdADC
+    PRODADCEN2 --> ProdADC
+    PRODAzureEN1 --> ProdAzure
+    PRODAzureEN2 --> ProdAzure
+    
+    %% Non-Prod IOC Connections
+    NONPRODIOCLB1 --> NONPRODIOCAG1
+    NONPRODIOCAG1 --> NONPRODIOCAC1
+    NONPRODIOCAG1 --> NONPRODIOCAH1
+    NONPRODIOCAC1 --> NONPRODIOCDB1
+    NONPRODIOCAC1 --> NONPRODIOCRedis
+    NONPRODIOCAH1 --> NONPRODIOCDB1
+    
+    %% Non-Prod ADC Connections
+    NONPRODADCLB1 --> NONPRODADCAG1
+    NONPRODADCAG1 --> NONPRODADCAC1
+    NONPRODADCAG1 --> NONPRODADCAH1
+    NONPRODADCAC1 --> NONPRODADCDB1
+    NONPRODADCAC1 --> NONPRODADCRedis
+    NONPRODADCAH1 --> NONPRODADCDB1
+    
+    %% Non-Prod Cross-DC Replication
+    NONPRODIOCDB1 -.->|Async Replication| NONPRODADCDB1
+    NONPRODIOCRedis -.->|Replication| NONPRODADCRedis
+    
+    %% Non-Prod Execution
+    NONPRODIOCAC1 --> NONPRODIOCEN1
+    NONPRODIOCAC1 --> NONPRODAzureEN1
+    NONPRODADCAC1 --> NONPRODADCEN1
+    
+    NONPRODIOCEN1 --> NonProdIOC
+    NONPRODADCEN1 --> NonProdADC
+    NONPRODAzureEN1 --> NonProdAzure
+    
+    %% Hub to Git
+    PRODIOCAH1 <--> Git
+    PRODADCAH1 <--> Git
+    NONPRODIOCAH1 <--> Git
+    NONPRODADCAH1 <--> Git
+    
+    %% Styling
+    classDef gslbprod fill:#ffebee,stroke:#b71c1c,stroke-width:3px
+    classDef gslbnonprod fill:#e0f2f1,stroke:#00695c,stroke-width:3px
+    classDef prod fill:#fff3e0,stroke:#e65100,stroke-width:2px
+    classDef nonprod fill:#e8f5e9,stroke:#2e7d32,stroke-width:2px
+    classDef database fill:#fce4ec,stroke:#880e4f,stroke-width:2px
+    classDef execution fill:#fff9c4,stroke:#f57f17,stroke-width:2px
+    classDef targets fill:#f1f8e9,stroke:#33691e,stroke-width:2px
+    
+    class GSLBPROD gslbprod
+    class GSLBNONPROD gslbnonprod
+    class PRODIOCLB1,PRODIOCAG1,PRODIOCAG2,PRODIOCAC1,PRODIOCAC2,PRODIOCAH1,PRODIOCED1 prod
+    class PRODADCLB1,PRODADCAG1,PRODADCAG2,PRODADCAC1,PRODADCAC2,PRODADCAH1,PRODADCED1 prod
+    class NONPRODIOCLB1,NONPRODIOCAG1,NONPRODIOCAC1,NONPRODIOCAH1 nonprod
+    class NONPRODADCLB1,NONPRODADCAG1,NONPRODADCAC1,NONPRODADCAH1 nonprod
+    class PRODIOCDB1,PRODADCDB1,PRODIOCRedis,PRODADCRedis database
+    class NONPRODIOCDB1,NONPRODADCDB1,NONPRODIOCRedis,NONPRODADCRedis database
+    class PRODIOCEN1,PRODIOCEN2,PRODADCEN1,PRODADCEN2,PRODAzureEN1,PRODAzureEN2 execution
+    class NONPRODIOCEN1,NONPRODADCEN1,NONPRODAzureEN1 execution
+    class ProdIOC,ProdADC,ProdAzure,NonProdIOC,NonProdADC,NonProdAzure targets

@@ -1,0 +1,243 @@
+%% Red Hat Ansible Automation Platform 2.5
+%% Scenario 2: Two Datacenters (IOC & ADC) with High Availability
+%% Separate execution nodes per datacenter with datacenter failure tolerance
+
+graph TB
+    %% External Access
+    Users[External Users/APIs]
+    
+    %% Global Load Balancer
+    subgraph GLB["Global Load Balancer (DNS/GSLB)"]
+        GSLB[Global Traffic Manager<br/>Failover between DCs]
+    end
+    
+    %% IOC Datacenter
+    subgraph IOC["IOC Datacenter (Primary)"]
+        
+        %% IOC Load Balancer
+        subgraph IOCLB["IOC Load Balancer"]
+            IOCLB1[IOC LB<br/>lb.ioc.example.com]
+        end
+        
+        %% IOC Gateway
+        subgraph IOCGateway["Automation Gateway Cluster"]
+            IOCAG1[Gateway 1<br/>gateway1.ioc.example.com]
+            IOCAG2[Gateway 2<br/>gateway2.ioc.example.com]
+        end
+        
+        %% IOC Controller
+        subgraph IOCController["Controller Cluster"]
+            IOCAC1[Controller 1<br/>controller1.ioc.example.com]
+            IOCAC2[Controller 2<br/>controller2.ioc.example.com]
+        end
+        
+        %% IOC Hub
+        subgraph IOCHub["Hub Cluster"]
+            IOCAH1[Hub 1<br/>hub1.ioc.example.com]
+            IOCAH2[Hub 2<br/>hub2.ioc.example.com]
+        end
+        
+        %% IOC EDA
+        subgraph IOCEDA["Event-Driven Ansible"]
+            IOCED1[EDA 1<br/>eda1.ioc.example.com]
+        end
+        
+        %% IOC Database
+        subgraph IOCDB["Database Cluster"]
+            IOCDB1[(Primary DB<br/>db1.ioc.example.com)]
+            IOCRedis[Redis<br/>redis1.ioc.example.com]
+        end
+        
+        %% IOC Execution Nodes
+        subgraph IOCExec["IOC Execution Nodes"]
+            IOCEN1[IOC Exec 1<br/>ioc-exec1.ioc.example.com]
+            IOCEN2[IOC Exec 2<br/>ioc-exec2.ioc.example.com]
+        end
+    end
+    
+    %% ADC Datacenter
+    subgraph ADC["ADC Datacenter (Secondary)"]
+        
+        %% ADC Load Balancer
+        subgraph ADCLB["ADC Load Balancer"]
+            ADCLB1[ADC LB<br/>lb.adc.example.com]
+        end
+        
+        %% ADC Gateway
+        subgraph ADCGateway["Automation Gateway Cluster"]
+            ADCAG1[Gateway 1<br/>gateway1.adc.example.com]
+            ADCAG2[Gateway 2<br/>gateway2.adc.example.com]
+        end
+        
+        %% ADC Controller
+        subgraph ADCController["Controller Cluster"]
+            ADCAC1[Controller 1<br/>controller1.adc.example.com]
+            ADCAC2[Controller 2<br/>controller2.adc.example.com]
+        end
+        
+        %% ADC Hub
+        subgraph ADCHub["Hub Cluster"]
+            ADCAH1[Hub 1<br/>hub1.adc.example.com]
+            ADCAH2[Hub 2<br/>hub2.adc.example.com]
+        end
+        
+        %% ADC EDA
+        subgraph ADCEDA["Event-Driven Ansible"]
+            ADCED1[EDA 1<br/>eda1.adc.example.com]
+        end
+        
+        %% ADC Database
+        subgraph ADCDB["Database Cluster"]
+            ADCDB1[(Standby DB<br/>db1.adc.example.com)]
+            ADCRedis[Redis<br/>redis1.adc.example.com]
+        end
+        
+        %% ADC Execution Nodes
+        subgraph ADCExec["ADC Execution Nodes"]
+            ADCEN1[ADC Exec 1<br/>adc-exec1.adc.example.com]
+            ADCEN2[ADC Exec 2<br/>adc-exec2.adc.example.com]
+        end
+    end
+    
+    %% Azure Execution Nodes (Separate)
+    subgraph AzureExec["Azure Execution Nodes"]
+        AzureEN1[Azure Exec 1<br/>azure-exec1.ioc.example.com]
+        AzureEN2[Azure Exec 2<br/>azure-exec2.adc.example.com]
+    end
+    
+    %% Target Environments
+    subgraph IOCTargets["IOC Targets"]
+        IOCHosts[IOC Client Hosts]
+    end
+    
+    subgraph ADCTargets["ADC Targets"]
+        ADCHosts[ADC Client Hosts]
+    end
+    
+    subgraph AzureTargets["Azure Targets"]
+        AzureHosts[Azure Resources]
+    end
+    
+    %% External Systems
+    subgraph External["External Systems"]
+        Git[Git Repositories]
+    end
+    
+    %% User to GSLB
+    Users -->|HTTPS 443| GSLB
+    
+    %% GSLB to Datacenters
+    GSLB -->|Primary| IOCLB1
+    GSLB -.->|Failover| ADCLB1
+    
+    %% IOC Connections
+    IOCLB1 --> IOCAG1
+    IOCLB1 --> IOCAG2
+    
+    IOCAG1 --> IOCAC1
+    IOCAG1 --> IOCAC2
+    IOCAG2 --> IOCAC1
+    IOCAG2 --> IOCAC2
+    
+    IOCAG1 --> IOCAH1
+    IOCAG1 --> IOCAH2
+    IOCAG2 --> IOCAH1
+    IOCAG2 --> IOCAH2
+    
+    IOCAG1 --> IOCED1
+    IOCAG2 --> IOCED1
+    
+    IOCAC1 -->|PostgreSQL| IOCDB1
+    IOCAC2 -->|PostgreSQL| IOCDB1
+    IOCAC1 -->|Redis| IOCRedis
+    IOCAC2 -->|Redis| IOCRedis
+    
+    IOCAH1 -->|PostgreSQL| IOCDB1
+    IOCAH2 -->|PostgreSQL| IOCDB1
+    IOCED1 -->|PostgreSQL| IOCDB1
+    
+    %% ADC Connections
+    ADCLB1 --> ADCAG1
+    ADCLB1 --> ADCAG2
+    
+    ADCAG1 --> ADCAC1
+    ADCAG1 --> ADCAC2
+    ADCAG2 --> ADCAC1
+    ADCAG2 --> ADCAC2
+    
+    ADCAG1 --> ADCAH1
+    ADCAG1 --> ADCAH2
+    ADCAG2 --> ADCAH1
+    ADCAG2 --> ADCAH2
+    
+    ADCAG1 --> ADCED1
+    ADCAG2 --> ADCED1
+    
+    ADCAC1 -->|PostgreSQL| ADCDB1
+    ADCAC2 -->|PostgreSQL| ADCDB1
+    ADCAC1 -->|Redis| ADCRedis
+    ADCAC2 -->|Redis| ADCRedis
+    
+    ADCAH1 -->|PostgreSQL| ADCDB1
+    ADCAH2 -->|PostgreSQL| ADCDB1
+    ADCED1 -->|PostgreSQL| ADCDB1
+    
+    %% Cross-DC Database Replication
+    IOCDB1 -.->|Async Replication| ADCDB1
+    IOCRedis -.->|Replication| ADCRedis
+    
+    %% Controller to Execution Nodes
+    IOCAC1 -->|Mesh| IOCEN1
+    IOCAC1 -->|Mesh| IOCEN2
+    IOCAC2 -->|Mesh| IOCEN1
+    IOCAC2 -->|Mesh| IOCEN2
+    
+    ADCAC1 -->|Mesh| ADCEN1
+    ADCAC1 -->|Mesh| ADCEN2
+    ADCAC2 -->|Mesh| ADCEN1
+    ADCAC2 -->|Mesh| ADCEN2
+    
+    %% Azure Execution Nodes
+    IOCAC1 -->|Mesh| AzureEN1
+    IOCAC2 -->|Mesh| AzureEN1
+    ADCAC1 -->|Mesh| AzureEN2
+    ADCAC2 -->|Mesh| AzureEN2
+    
+    %% Hub to Git
+    IOCAH1 <-->|Sync| Git
+    IOCAH2 <-->|Sync| Git
+    ADCAH1 <-->|Sync| Git
+    ADCAH2 <-->|Sync| Git
+    
+    %% Execution Nodes to Targets
+    IOCEN1 -->|Automation| IOCHosts
+    IOCEN2 -->|Automation| IOCHosts
+    
+    ADCEN1 -->|Automation| ADCHosts
+    ADCEN2 -->|Automation| ADCHosts
+    
+    AzureEN1 -->|ExpressRoute| AzureHosts
+    AzureEN2 -->|ExpressRoute| AzureHosts
+    
+    %% Styling
+    classDef gslb fill:#e8eaf6,stroke:#283593,stroke-width:3px
+    classDef loadbalancer fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    classDef gateway fill:#e1f5ff,stroke:#01579b,stroke-width:3px
+    classDef controller fill:#fff3e0,stroke:#e65100,stroke-width:3px
+    classDef hub fill:#f3e5f5,stroke:#4a148c,stroke-width:3px
+    classDef eda fill:#e8f5e9,stroke:#1b5e20,stroke-width:3px
+    classDef database fill:#fce4ec,stroke:#880e4f,stroke-width:3px
+    classDef execution fill:#fff9c4,stroke:#f57f17,stroke-width:3px
+    classDef targets fill:#f1f8e9,stroke:#33691e,stroke-width:2px
+    classDef external fill:#eceff1,stroke:#263238,stroke-width:2px
+    
+    class GSLB gslb
+    class IOCLB1,ADCLB1 loadbalancer
+    class IOCAG1,IOCAG2,ADCAG1,ADCAG2 gateway
+    class IOCAC1,IOCAC2,ADCAC1,ADCAC2 controller
+    class IOCAH1,IOCAH2,ADCAH1,ADCAH2 hub
+    class IOCED1,ADCED1 eda
+    class IOCDB1,ADCDB1,IOCRedis,ADCRedis database
+    class IOCEN1,IOCEN2,ADCEN1,ADCEN2,AzureEN1,AzureEN2 execution
+    class IOCHosts,ADCHosts,AzureHosts targets
+    class Git external
