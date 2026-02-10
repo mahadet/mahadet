@@ -1,0 +1,85 @@
+%% Red Hat Ansible Automation Platform 2.5
+%% Infrastructure Topology 3 - Multi-Node Enterprise Deployment (RPM)
+%% Editable Mermaid Diagram
+
+graph TB
+    %% External Access
+    Users[External Users/APIs]
+    
+    %% Automation Gateway Layer
+    subgraph Gateway["Automation Gateway (gateway.example.com)"]
+        AG[Automation Gateway<br/>Port: 443 HTTPS]
+    end
+    
+    %% Controller Layer
+    subgraph Controller["Automation Controller (controller.example.com)"]
+        AC[Automation Controller<br/>Formerly Ansible Tower<br/>Ports: 443, 80]
+    end
+    
+    %% Hub Layer
+    subgraph Hub["Automation Hub (hub.example.com)"]
+        AH[Automation Hub<br/>Content Collections<br/>Ports: 443, 80]
+    end
+    
+    %% Event-Driven Ansible (Optional)
+    subgraph EDA["Event-Driven Ansible (eda.example.com)"]
+        ED[Event-Driven Ansible<br/>Real-time Automation<br/>Port: 443]
+    end
+    
+    %% Database Layer
+    subgraph Database["Database Server (db.example.com)"]
+        DB[(PostgreSQL Database<br/>Port: 5432)]
+        Redis[Redis Cache<br/>Port: 6379]
+    end
+    
+    %% Execution Nodes
+    subgraph ExecNodes["Execution Nodes"]
+        EN1[Execution Node 1<br/>execnode1.example.com<br/>Port: 27199]
+        EN2[Execution Node 2<br/>execnode2.example.com<br/>Port: 27199]
+        EN3[Execution Node 3<br/>execnode3.example.com<br/>Port: 27199]
+    end
+    
+    %% External Systems
+    subgraph External["External Systems"]
+        Git[Git Repositories]
+        Targets[Target Hosts/<br/>Infrastructure]
+    end
+    
+    %% Connections
+    Users -->|HTTPS 443| AG
+    AG -->|HTTPS 443| AC
+    AG -->|HTTPS 443| AH
+    AG -->|HTTPS 443| ED
+    
+    AC -->|PostgreSQL 5432| DB
+    AC -->|Redis 6379| Redis
+    AC -->|Mesh 27199| EN1
+    AC -->|Mesh 27199| EN2
+    AC -->|Mesh 27199| EN3
+    
+    AH -->|PostgreSQL 5432| DB
+    ED -->|PostgreSQL 5432| DB
+    
+    AH <-->|Sync| Git
+    AC <-->|Playbooks| Git
+    
+    EN1 -->|Automation| Targets
+    EN2 -->|Automation| Targets
+    EN3 -->|Automation| Targets
+    
+    %% Styling
+    classDef gateway fill:#e1f5ff,stroke:#01579b,stroke-width:3px
+    classDef controller fill:#fff3e0,stroke:#e65100,stroke-width:3px
+    classDef hub fill:#f3e5f5,stroke:#4a148c,stroke-width:3px
+    classDef eda fill:#e8f5e9,stroke:#1b5e20,stroke-width:3px
+    classDef database fill:#fce4ec,stroke:#880e4f,stroke-width:3px
+    classDef execution fill:#fff9c4,stroke:#f57f17,stroke-width:3px
+    classDef external fill:#eceff1,stroke:#263238,stroke-width:2px
+    
+    class AG gateway
+    class AC controller
+    class AH hub
+    class ED eda
+    class DB,Redis database
+    class EN1,EN2,EN3 execution
+    class Git,Targets external

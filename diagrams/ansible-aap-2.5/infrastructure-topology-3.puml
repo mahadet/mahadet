@@ -1,0 +1,95 @@
+@startuml Infrastructure_Topology_3_AAP_2.5
+!define RECTANGLE class
+
+title Red Hat Ansible Automation Platform 2.5\nInfrastructure Topology 3 - Multi-Node Enterprise Deployment (RPM)
+
+skinparam componentStyle rectangle
+skinparam backgroundColor white
+skinparam shadowing false
+
+' External Access
+actor "External Users/APIs" as Users
+
+' Automation Gateway
+package "Automation Gateway\ngateway.example.com" as GatewayPkg #E1F5FF {
+    component "Automation Gateway\nPort: 443 HTTPS" as Gateway
+}
+
+' Automation Controller
+package "Automation Controller\ncontroller.example.com" as ControllerPkg #FFF3E0 {
+    component "Automation Controller\n(Formerly Ansible Tower)\nPorts: 443, 80" as Controller
+}
+
+' Automation Hub
+package "Automation Hub\nhub.example.com" as HubPkg #F3E5F5 {
+    component "Automation Hub\nContent Collections\nPorts: 443, 80" as Hub
+}
+
+' Event-Driven Ansible
+package "Event-Driven Ansible\neda.example.com" as EDAPkg #E8F5E9 {
+    component "Event-Driven Ansible\nReal-time Automation\nPort: 443" as EDA
+}
+
+' Database Layer
+package "Database Server\ndb.example.com" as DBPkg #FCE4EC {
+    database "PostgreSQL Database\nPort: 5432" as DB
+    component "Redis Cache\nPort: 6379" as Redis
+}
+
+' Execution Nodes
+package "Execution Nodes" as ExecNodesPkg #FFF9C4 {
+    component "Execution Node 1\nexecnode1.example.com\nPort: 27199" as EN1
+    component "Execution Node 2\nexecnode2.example.com\nPort: 27199" as EN2
+    component "Execution Node 3\nexecnode3.example.com\nPort: 27199" as EN3
+}
+
+' External Systems
+package "External Systems" as ExternalPkg #ECEFF1 {
+    component "Git Repositories" as Git
+    component "Target Hosts/\nInfrastructure" as Targets
+}
+
+' Connections
+Users -down-> Gateway : "HTTPS 443"
+
+Gateway -down-> Controller : "HTTPS 443"
+Gateway -down-> Hub : "HTTPS 443"
+Gateway -down-> EDA : "HTTPS 443"
+
+Controller -down-> DB : "PostgreSQL 5432"
+Controller -down-> Redis : "Redis 6379"
+Controller -right-> EN1 : "Mesh 27199"
+Controller -right-> EN2 : "Mesh 27199"
+Controller -right-> EN3 : "Mesh 27199"
+
+Hub -down-> DB : "PostgreSQL 5432"
+EDA -down-> DB : "PostgreSQL 5432"
+
+Hub <--> Git : "Sync"
+Controller <--> Git : "Playbooks"
+
+EN1 -down-> Targets : "Automation"
+EN2 -down-> Targets : "Automation"
+EN3 -down-> Targets : "Automation"
+
+note right of Gateway
+  Entry point for all
+  external API access
+end note
+
+note right of Controller
+  Manages automation execution
+  and provides central UI
+end note
+
+note right of ExecNodesPkg
+  Scalable execution nodes
+  for running automation tasks
+end note
+
+note bottom of DBPkg
+  Shared database for
+  all AAP components
+end note
+
+@enduml
