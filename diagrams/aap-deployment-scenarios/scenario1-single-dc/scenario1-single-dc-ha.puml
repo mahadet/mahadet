@@ -1,0 +1,181 @@
+@startuml Scenario1_Single_DC_HA
+!define RECTANGLE class
+
+title Red Hat Ansible Automation Platform 2.5\nScenario 1: Single Datacenter (IOC) with High Availability\nCommon Execution Nodes for All Target Environments
+
+skinparam componentStyle rectangle
+skinparam backgroundColor white
+skinparam shadowing false
+
+' External Access
+actor "External Users/APIs" as Users
+
+' Load Balancer
+package "Load Balancer (HA Pair)" as LBPkg #E3F2FD {
+    component "Primary LB\nlb1.ioc.example.com" as LB1
+    component "Secondary LB\nlb2.ioc.example.com" as LB2
+}
+
+' IOC Datacenter
+rectangle "IOC Datacenter" #FAFAFA {
+    
+    ' Automation Gateway Cluster
+    package "Automation Gateway Cluster\n(Active-Active)" as GatewayPkg #E1F5FF {
+        component "Gateway Node 1\ngateway1.ioc.example.com\nPort: 443" as GW1
+        component "Gateway Node 2\ngateway2.ioc.example.com\nPort: 443" as GW2
+    }
+    
+    ' Automation Controller Cluster
+    package "Automation Controller Cluster\n(Active-Active)" as ControllerPkg #FFF3E0 {
+        component "Controller Node 1\ncontroller1.ioc.example.com\nPorts: 443, 80" as CTRL1
+        component "Controller Node 2\ncontroller2.ioc.example.com\nPorts: 443, 80" as CTRL2
+        component "Controller Node 3\ncontroller3.ioc.example.com\nPorts: 443, 80" as CTRL3
+    }
+    
+    ' Automation Hub Cluster
+    package "Automation Hub Cluster\n(Active-Active)" as HubPkg #F3E5F5 {
+        component "Hub Node 1\nhub1.ioc.example.com\nPorts: 443, 80" as HUB1
+        component "Hub Node 2\nhub2.ioc.example.com\nPorts: 443, 80" as HUB2
+    }
+    
+    ' Event-Driven Ansible
+    package "Event-Driven Ansible\n(Active-Passive)" as EDAPkg #E8F5E9 {
+        component "EDA Primary\neda1.ioc.example.com\nPort: 443" as EDA1
+        component "EDA Secondary\neda2.ioc.example.com\nPort: 443" as EDA2
+    }
+    
+    ' Database Cluster
+    package "Database Cluster\n(PostgreSQL HA)" as DBPkg #FCE4EC {
+        database "Primary PostgreSQL\ndb1.ioc.example.com\nPort: 5432" as DB1
+        database "Standby PostgreSQL\ndb2.ioc.example.com\nPort: 5432" as DB2
+        component "Primary Redis\nredis1.ioc.example.com\nPort: 6379" as REDIS1
+        component "Standby Redis\nredis2.ioc.example.com\nPort: 6379" as REDIS2
+    }
+    
+    ' Common Execution Nodes
+    package "Common Execution Nodes Pool" as ExecPkg #FFF9C4 {
+        component "Exec Node 1\nexec1.ioc.example.com\nPort: 27199" as EN1
+        component "Exec Node 2\nexec2.ioc.example.com\nPort: 27199" as EN2
+        component "Exec Node 3\nexec3.ioc.example.com\nPort: 27199" as EN3
+        component "Exec Node 4\nexec4.ioc.example.com\nPort: 27199" as EN4
+    }
+}
+
+' Target Environments
+package "IOC Datacenter Targets" as IOCTargets #F1F8E9 {
+    component "IOC Client Hosts" as IOC
+}
+
+package "ADC Datacenter Targets" as ADCTargets #F1F8E9 {
+    component "ADC Client Hosts" as ADC
+}
+
+package "Azure Cloud Targets" as AzureTargets #F1F8E9 {
+    component "Azure Client Hosts" as Azure
+}
+
+' External Systems
+package "External Systems" as ExtPkg #ECEFF1 {
+    component "Git Repositories" as Git
+}
+
+' Connections
+Users -down-> LB1 : "HTTPS 443"
+Users -down-> LB2 : "HTTPS 443"
+
+LB1 ..> GW1 : "Active"
+LB1 ..> GW2 : "Active"
+LB2 ..> GW1 : "Standby"
+LB2 ..> GW2 : "Standby"
+
+GW1 -down-> CTRL1 : "HTTPS 443"
+GW1 -down-> CTRL2 : "HTTPS 443"
+GW1 -down-> CTRL3 : "HTTPS 443"
+GW2 -down-> CTRL1 : "HTTPS 443"
+GW2 -down-> CTRL2 : "HTTPS 443"
+GW2 -down-> CTRL3 : "HTTPS 443"
+
+GW1 -down-> HUB1 : "HTTPS 443"
+GW1 -down-> HUB2 : "HTTPS 443"
+GW2 -down-> HUB1 : "HTTPS 443"
+GW2 -down-> HUB2 : "HTTPS 443"
+
+GW1 -down-> EDA1 : "HTTPS 443"
+GW2 -down-> EDA1 : "HTTPS 443"
+
+CTRL1 -down-> DB1 : "PostgreSQL 5432"
+CTRL2 -down-> DB1 : "PostgreSQL 5432"
+CTRL3 -down-> DB1 : "PostgreSQL 5432"
+
+CTRL1 -down-> REDIS1 : "Redis 6379"
+CTRL2 -down-> REDIS1 : "Redis 6379"
+CTRL3 -down-> REDIS1 : "Redis 6379"
+
+DB1 ..> DB2 : "Streaming\nReplication"
+REDIS1 ..> REDIS2 : "Replication"
+
+HUB1 -down-> DB1 : "PostgreSQL 5432"
+HUB2 -down-> DB1 : "PostgreSQL 5432"
+
+EDA1 -down-> DB1 : "PostgreSQL 5432"
+EDA1 ..> EDA2 : "Heartbeat"
+
+CTRL1 -down-> EN1 : "Mesh 27199"
+CTRL1 -down-> EN2 : "Mesh 27199"
+CTRL1 -down-> EN3 : "Mesh 27199"
+CTRL1 -down-> EN4 : "Mesh 27199"
+
+CTRL2 -down-> EN1 : "Mesh 27199"
+CTRL2 -down-> EN2 : "Mesh 27199"
+CTRL2 -down-> EN3 : "Mesh 27199"
+CTRL2 -down-> EN4 : "Mesh 27199"
+
+CTRL3 -down-> EN1 : "Mesh 27199"
+CTRL3 -down-> EN2 : "Mesh 27199"
+CTRL3 -down-> EN3 : "Mesh 27199"
+CTRL3 -down-> EN4 : "Mesh 27199"
+
+HUB1 <-right-> Git : "Sync"
+HUB2 <-right-> Git : "Sync"
+
+EN1 -down-> IOC : "Automation"
+EN1 -down-> ADC : "Automation"
+EN1 -down-> Azure : "VPN/ExpressRoute"
+
+EN2 -down-> IOC : "Automation"
+EN2 -down-> ADC : "Automation"
+EN2 -down-> Azure : "VPN/ExpressRoute"
+
+EN3 -down-> IOC : "Automation"
+EN3 -down-> ADC : "Automation"
+EN3 -down-> Azure : "VPN/ExpressRoute"
+
+EN4 -down-> IOC : "Automation"
+EN4 -down-> ADC : "Automation"
+EN4 -down-> Azure : "VPN/ExpressRoute"
+
+note right of LBPkg
+  HA Pair provides fault tolerance
+  during maintenance or failure
+end note
+
+note right of ControllerPkg
+  Active-Active cluster allows
+  maintenance on any node
+  without downtime
+end note
+
+note right of DBPkg
+  PostgreSQL streaming replication
+  provides automatic failover
+end note
+
+note right of ExecPkg
+  Common execution node pool
+  serves all target environments:
+  - IOC Datacenter
+  - ADC Datacenter
+  - Azure Cloud
+end note
+
+@enduml
