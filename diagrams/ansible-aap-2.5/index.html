@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Red Hat AAP 2.5 - Infrastructure Topology 3</title>
+    <script type="module">
+        import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+        mermaid.initialize({ 
+            startOnLoad: true,
+            theme: 'default',
+            securityLevel: 'loose',
+        });
+    </script>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        h1 {
+            color: #cc0000;
+            text-align: center;
+            border-bottom: 3px solid #cc0000;
+            padding-bottom: 10px;
+        }
+        h2 {
+            color: #333;
+            margin-top: 30px;
+        }
+        .diagram-container {
+            background: white;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .info-box {
+            background: #e8f4f8;
+            border-left: 4px solid #0066cc;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 4px;
+        }
+        .component-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+        .component-card {
+            background: white;
+            padding: 15px;
+            border-radius: 6px;
+            border-left: 4px solid #cc0000;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+        .component-card h3 {
+            margin-top: 0;
+            color: #cc0000;
+        }
+        .port-info {
+            background: #f9f9f9;
+            padding: 5px 10px;
+            border-radius: 3px;
+            font-family: monospace;
+            font-size: 0.9em;
+            display: inline-block;
+            margin: 5px 5px 5px 0;
+        }
+        .edit-links {
+            background: #fff3cd;
+            border: 1px solid #ffc107;
+            padding: 15px;
+            border-radius: 6px;
+            margin: 20px 0;
+        }
+        .edit-links a {
+            display: inline-block;
+            margin: 5px 10px 5px 0;
+            padding: 8px 15px;
+            background: #0066cc;
+            color: white;
+            text-decoration: none;
+            border-radius: 4px;
+            transition: background 0.3s;
+        }
+        .edit-links a:hover {
+            background: #0052a3;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            background: white;
+        }
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        th {
+            background-color: #cc0000;
+            color: white;
+        }
+        tr:hover {
+            background-color: #f5f5f5;
+        }
+    </style>
+</head>
+<body>
+    <h1>🚀 Red Hat Ansible Automation Platform 2.5</h1>
+    <h2>Infrastructure Topology 3 - Multi-Node Enterprise Deployment (RPM)</h2>
+    
+    <div class="info-box">
+        <h3>📋 About This Topology</h3>
+        <p>
+            <strong>Infrastructure Topology 3</strong> is an enterprise-grade, multi-node deployment where each major 
+            AAP component runs on a dedicated host. This architecture provides high availability, scalability, 
+            and security for production automation workloads.
+        </p>
+    </div>
+
+    <div class="edit-links">
+        <h3>✏️ Edit These Diagrams:</h3>
+        <a href="infrastructure-topology-3.mmd" target="_blank">📝 Mermaid (.mmd)</a>
+        <a href="infrastructure-topology-3.puml" target="_blank">📐 PlantUML (.puml)</a>
+        <a href="infrastructure-topology-3.drawio" target="_blank">🎨 Draw.io (.drawio)</a>
+        <a href="README.md" target="_blank">📚 Documentation</a>
+    </div>
+
+    <div class="diagram-container">
+        <h2>🏗️ Architecture Diagram</h2>
+        <div class="mermaid">
+graph TB
+    Users[External Users/APIs]
+    
+    subgraph Gateway["Automation Gateway (gateway.example.com)"]
+        AG[Automation Gateway<br/>Port: 443 HTTPS]
+    end
+    
+    subgraph Controller["Automation Controller (controller.example.com)"]
+        AC[Automation Controller<br/>Formerly Ansible Tower<br/>Ports: 443, 80]
+    end
+    
+    subgraph Hub["Automation Hub (hub.example.com)"]
+        AH[Automation Hub<br/>Content Collections<br/>Ports: 443, 80]
+    end
+    
+    subgraph EDA["Event-Driven Ansible (eda.example.com)"]
+        ED[Event-Driven Ansible<br/>Real-time Automation<br/>Port: 443]
+    end
+    
+    subgraph Database["Database Server (db.example.com)"]
+        DB[(PostgreSQL Database<br/>Port: 5432)]
+        Redis[Redis Cache<br/>Port: 6379]
+    end
+    
+    subgraph ExecNodes["Execution Nodes"]
+        EN1[Execution Node 1<br/>execnode1.example.com<br/>Port: 27199]
+        EN2[Execution Node 2<br/>execnode2.example.com<br/>Port: 27199]
+        EN3[Execution Node 3<br/>execnode3.example.com<br/>Port: 27199]
+    end
+    
+    subgraph External["External Systems"]
+        Git[Git Repositories]
+        Targets[Target Hosts/<br/>Infrastructure]
+    end
+    
+    Users -->|HTTPS 443| AG
+    AG -->|HTTPS 443| AC
+    AG -->|HTTPS 443| AH
+    AG -->|HTTPS 443| ED
+    
+    AC -->|PostgreSQL 5432| DB
+    AC -->|Redis 6379| Redis
+    AC -->|Mesh 27199| EN1
+    AC -->|Mesh 27199| EN2
+    AC -->|Mesh 27199| EN3
+    
+    AH -->|PostgreSQL 5432| DB
+    ED -->|PostgreSQL 5432| DB
+    
+    AH <-->|Sync| Git
+    AC <-->|Playbooks| Git
+    
+    EN1 -->|Automation| Targets
+    EN2 -->|Automation| Targets
+    EN3 -->|Automation| Targets
+    
+    classDef gateway fill:#e1f5ff,stroke:#01579b,stroke-width:3px
+    classDef controller fill:#fff3e0,stroke:#e65100,stroke-width:3px
+    classDef hub fill:#f3e5f5,stroke:#4a148c,stroke-width:3px
+    classDef eda fill:#e8f5e9,stroke:#1b5e20,stroke-width:3px
+    classDef database fill:#fce4ec,stroke:#880e4f,stroke-width:3px
+    classDef execution fill:#fff9c4,stroke:#f57f17,stroke-width:3px
+    classDef external fill:#eceff1,stroke:#263238,stroke-width:2px
+    
+    class AG gateway
+    class AC controller
+    class AH hub
+    class ED eda
+    class DB,Redis database
+    class EN1,EN2,EN3 execution
+    class Git,Targets external
+        </div>
+    </div>
+
+    <h2>🔧 Component Details</h2>
+    <div class="component-list">
+        <div class="component-card">
+            <h3>🔐 Automation Gateway</h3>
+            <p><strong>Host:</strong> gateway.example.com</p>
+            <p><strong>Role:</strong> API Gateway & Entry Point</p>
+            <p><strong>Ports:</strong> <span class="port-info">443 HTTPS</span></p>
+            <p>New in AAP 2.5 - provides unified API access to all services.</p>
+        </div>
+
+        <div class="component-card">
+            <h3>🎮 Automation Controller</h3>
+            <p><strong>Host:</strong> controller.example.com</p>
+            <p><strong>Role:</strong> Central Control Plane</p>
+            <p><strong>Ports:</strong> <span class="port-info">443/80 HTTP(S)</span></p>
+            <p>Manages automation execution, inventory, and job scheduling.</p>
+        </div>
+
+        <div class="component-card">
+            <h3>📦 Automation Hub</h3>
+            <p><strong>Host:</strong> hub.example.com</p>
+            <p><strong>Role:</strong> Content Repository</p>
+            <p><strong>Ports:</strong> <span class="port-info">443/80 HTTP(S)</span></p>
+            <p>Hosts and curates Ansible content collections.</p>
+        </div>
+
+        <div class="component-card">
+            <h3>⚡ Event-Driven Ansible</h3>
+            <p><strong>Host:</strong> eda.example.com</p>
+            <p><strong>Role:</strong> Event Automation (Optional)</p>
+            <p><strong>Ports:</strong> <span class="port-info">443 HTTPS</span></p>
+            <p>Real-time, event-based automation triggers.</p>
+        </div>
+
+        <div class="component-card">
+            <h3>💾 Database Server</h3>
+            <p><strong>Host:</strong> db.example.com</p>
+            <p><strong>Components:</strong> PostgreSQL + Redis</p>
+            <p><strong>Ports:</strong> <span class="port-info">5432 PostgreSQL</span> <span class="port-info">6379 Redis</span></p>
+            <p>Shared data layer for all AAP components.</p>
+        </div>
+
+        <div class="component-card">
+            <h3>⚙️ Execution Nodes</h3>
+            <p><strong>Hosts:</strong> execnode1-3.example.com</p>
+            <p><strong>Role:</strong> Task Execution</p>
+            <p><strong>Ports:</strong> <span class="port-info">27199 Mesh</span></p>
+            <p>Scalable workers that run automation tasks.</p>
+        </div>
+    </div>
+
+    <h2>🌐 Network Communication Matrix</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Source</th>
+                <th>Destination</th>
+                <th>Port</th>
+                <th>Protocol</th>
+                <th>Purpose</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>External Users/APIs</td>
+                <td>Automation Gateway</td>
+                <td>443</td>
+                <td>HTTPS</td>
+                <td>External access</td>
+            </tr>
+            <tr>
+                <td>Gateway</td>
+                <td>Controller</td>
+                <td>443</td>
+                <td>HTTPS</td>
+                <td>API routing</td>
+            </tr>
+            <tr>
+                <td>Gateway</td>
+                <td>Hub</td>
+                <td>443</td>
+                <td>HTTPS</td>
+                <td>API routing</td>
+            </tr>
+            <tr>
+                <td>Gateway</td>
+                <td>EDA</td>
+                <td>443</td>
+                <td>HTTPS</td>
+                <td>API routing</td>
+            </tr>
+            <tr>
+                <td>Controller</td>
+                <td>Database</td>
+                <td>5432</td>
+                <td>PostgreSQL</td>
+                <td>Data persistence</td>
+            </tr>
+            <tr>
+                <td>Controller</td>
+                <td>Redis</td>
+                <td>6379</td>
+                <td>Redis</td>
+                <td>Task queue</td>
+            </tr>
+            <tr>
+                <td>Controller</td>
+                <td>Execution Nodes</td>
+                <td>27199</td>
+                <td>Automation Mesh</td>
+                <td>Job execution</td>
+            </tr>
+            <tr>
+                <td>Hub</td>
+                <td>Database</td>
+                <td>5432</td>
+                <td>PostgreSQL</td>
+                <td>Data persistence</td>
+            </tr>
+            <tr>
+                <td>EDA</td>
+                <td>Database</td>
+                <td>5432</td>
+                <td>PostgreSQL</td>
+                <td>Data persistence</td>
+            </tr>
+            <tr>
+                <td>Hub/Controller</td>
+                <td>Git Repositories</td>
+                <td>443/22</td>
+                <td>HTTPS/SSH</td>
+                <td>Content sync</td>
+            </tr>
+            <tr>
+                <td>Execution Nodes</td>
+                <td>Target Hosts</td>
+                <td>Various</td>
+                <td>Various</td>
+                <td>Automation tasks</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div class="info-box">
+        <h3>💡 Key Features</h3>
+        <ul>
+            <li><strong>High Availability:</strong> Components can be clustered and load-balanced</li>
+            <li><strong>Scalability:</strong> Add execution nodes as needed for capacity</li>
+            <li><strong>Security:</strong> Network segmentation with component isolation</li>
+            <li><strong>Enterprise-Ready:</strong> Red Hat tested and supported topology</li>
+            <li><strong>Multi-Region:</strong> Execution nodes can span different networks</li>
+        </ul>
+    </div>
+
+    <div class="info-box" style="border-left-color: #28a745;">
+        <h3>📚 Additional Resources</h3>
+        <ul>
+            <li><a href="https://docs.redhat.com/en/documentation/red_hat_ansible_automation_platform/2.5/" target="_blank">Official Red Hat AAP 2.5 Documentation</a></li>
+            <li><a href="https://docs.redhat.com/en/documentation/red_hat_ansible_automation_platform/2.5/html/tested_deployment_models/rpm-topologies" target="_blank">RPM Topologies - Tested Deployment Models</a></li>
+            <li><a href="https://docs.redhat.com/en/documentation/red_hat_ansible_automation_platform/2.5/html/rpm_installation/" target="_blank">AAP Installation Guide</a></li>
+        </ul>
+    </div>
+
+    <footer style="text-align: center; margin-top: 40px; padding: 20px; border-top: 1px solid #ddd; color: #666;">
+        <p><strong>Red Hat Ansible Automation Platform 2.5</strong></p>
+        <p>Infrastructure Topology 3 - Multi-Node Enterprise Deployment (RPM)</p>
+        <p style="font-size: 0.9em;">Last Updated: 2026-02-10</p>
+    </footer>
+</body>
+</html>
