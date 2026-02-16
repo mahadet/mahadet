@@ -7,7 +7,7 @@
 - ⚡ Fun fact: ...
 This is my first file in Git Repository
 
-## 📊 Infrastructure Diagrams
+## 📊 Red Hat Ansible Automation Platform Deployments
 
 ### Red Hat Ansible Automation Platform 2.5
 
